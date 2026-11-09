@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-class OrderRepositoryIntegrationTest {
+class OrderRepositoryIntegrationTest extends com.commerceflow.order_service.PostgresTestSupport {
 
     @Autowired
     private OrderRepository orderRepository;

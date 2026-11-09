@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
+import java.util.Objects;
+import com.commerceflow.order_service.exception.InvalidOrderTransitionException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -65,6 +67,15 @@ public class Order {
     @PreUpdate
     private void onUpdate() {
         updatedAt = Instant.now().truncatedTo(ChronoUnit.MICROS);
+    }
+
+    public void changeStatus(OrderStatus next) {
+        Objects.requireNonNull(next, "status");
+        if (status == next) return;
+        if (status != OrderStatus.PENDING || next == OrderStatus.PENDING) {
+            throw new InvalidOrderTransitionException();
+        }
+        status = next;
     }
 
     public UUID getId() {
